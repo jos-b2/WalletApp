@@ -1,5 +1,6 @@
 package com.example.walletapp;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -23,7 +25,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextView tvTotalBalance;
     private LinearLayout llListaMovimientos;
 
-    // Saldo temporal en memoria
     private double saldoActual = 1275.00;
 
     @Override
@@ -55,17 +56,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onTransaccionGuardada(String montoStr, String descripcion) {
+    public void onTransaccionGuardada(String montoStr, String descripcion, boolean esIngreso) {
         try {
-            double gasto = Double.parseDouble(montoStr);
-            saldoActual -= gasto;
+            double valor = Double.parseDouble(montoStr);
 
-            // Actualizar Saldo Disponible
+            if (esIngreso) {
+                saldoActual += valor;
+            } else {
+                saldoActual -= valor;
+            }
+
             if (tvTotalBalance != null) {
                 tvTotalBalance.setText(String.format(Locale.US, "$%,.2f", saldoActual));
             }
 
-            // Inflar y agregar una nueva tarjeta al inicio de la lista
             if (llListaMovimientos != null) {
                 View nuevoItem = LayoutInflater.from(this).inflate(R.layout.item_movimiento, llListaMovimientos, false);
 
@@ -74,10 +78,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 TextView tvMonto = nuevoItem.findViewById(R.id.tv_item_monto);
 
                 tvTitulo.setText(descripcion);
-                tvSubtitulo.setText("General • Hace un momento");
-                tvMonto.setText(String.format(Locale.US, "-$%.2f", gasto));
+                tvSubtitulo.setText((esIngreso ? "Ingreso" : "Gasto") + " • Hace un momento");
 
-                // index 0 para que se añada arriba de los movimientos previos
+                if (esIngreso) {
+                    tvMonto.setText(String.format(Locale.US, "+$%.2f", valor));
+                    try {
+                        tvMonto.setTextColor(ContextCompat.getColor(this, R.color.primary_emerald));
+                    } catch (Exception e) {
+                        tvMonto.setTextColor(Color.parseColor("#2E7D32"));
+                    }
+                } else {
+                    tvMonto.setText(String.format(Locale.US, "-$%.2f", valor));
+                    try {
+                        tvMonto.setTextColor(ContextCompat.getColor(this, R.color.expense_red));
+                    } catch (Exception e) {
+                        tvMonto.setTextColor(Color.parseColor("#D32F2F"));
+                    }
+                }
+
                 llListaMovimientos.addView(nuevoItem, 0);
             }
 

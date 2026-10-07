@@ -8,17 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.materialswitch.MaterialSwitch;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class BottomSheetRegistro extends BottomSheetDialogFragment {
 
     public interface OnTransaccionGuardadaListener {
-        void onTransaccionGuardada(String monto, String descripcion);
+        void onTransaccionGuardada(String monto, String descripcion, boolean esIngreso);
     }
 
     private OnTransaccionGuardadaListener listener;
@@ -38,11 +37,21 @@ public class BottomSheetRegistro extends BottomSheetDialogFragment {
 
         EditText etMonto = view.findViewById(R.id.et_monto);
         EditText etDescripcion = view.findViewById(R.id.et_descripcion);
+        MaterialSwitch switchTipo = view.findViewById(R.id.switch_tipo_movimiento);
         Button btnGuardar = view.findViewById(R.id.btn_guardar);
+
+        switchTipo.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                switchTipo.setText("Tipo: Ingreso");
+            } else {
+                switchTipo.setText("Tipo: Gasto / Compra");
+            }
+        });
 
         btnGuardar.setOnClickListener(v -> {
             String monto = etMonto.getText().toString().trim();
             String descripcion = etDescripcion.getText().toString().trim();
+            boolean esIngreso = switchTipo.isChecked();
 
             if (TextUtils.isEmpty(monto)) {
                 mostrarAlerta(SweetAlertDialog.WARNING_TYPE, "Campo requerido", "Por favor ingresa el monto.");
@@ -54,15 +63,16 @@ public class BottomSheetRegistro extends BottomSheetDialogFragment {
                 return;
             }
 
+            String detalle = (esIngreso ? "+$" : "-$") + monto;
+
             SweetAlertDialog exitoDialog = new SweetAlertDialog(requireContext(), SweetAlertDialog.SUCCESS_TYPE);
             exitoDialog.setTitleText("Transacción Registrada");
-            exitoDialog.setContentText("Monto: $" + monto + "\nDescripción: " + descripcion);
+            exitoDialog.setContentText("Tipo: " + (esIngreso ? "Ingreso" : "Compra") + "\nMonto: " + detalle + "\nDescripción: " + descripcion);
             exitoDialog.setConfirmText("Aceptar");
             exitoDialog.setConfirmClickListener(sDialog -> {
                 if (listener != null) {
-                    listener.onTransaccionGuardada(monto, descripcion);
+                    listener.onTransaccionGuardada(monto, descripcion, esIngreso);
                 }
-                Toast.makeText(getContext(), "¡Guardado temporalmente!", Toast.LENGTH_SHORT).show();
                 sDialog.dismissWithAnimation();
                 dismiss();
             });
