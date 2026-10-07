@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/nav_dashboard" android:title="Dashboard (Inicio)" />
+        <item android:id="@+id/nav_transactions" android:title="Registro de Transacciones" />
+        <item android:id="@+id/nav_categories" android:title="Gestión de Categorías" />
+        <item android:id="@+id/nav_goals" android:title="Metas de Ahorro" />
+        <item android:id="@+id/nav_reports" android:title="Reportes Financieros" />
+    </group>
+</menu>
