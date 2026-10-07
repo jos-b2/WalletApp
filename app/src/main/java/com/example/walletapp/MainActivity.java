@@ -114,7 +114,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_transactions) {
             Toast.makeText(this, "Seleccionaste Transacciones", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_categories) {
-            Toast.makeText(this, "Seleccionaste Categorías", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(MainActivity.this, gestion_categoria.class);
+        startActivity(intent);
         } else if (id == R.id.nav_goals) {
             Intent intent = new Intent(MainActivity.this, meta_ahorro.class);
             startActivity(intent);
