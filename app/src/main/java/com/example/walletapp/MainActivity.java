@@ -1,5 +1,6 @@
 package com.example.walletapp;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -115,7 +116,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_categories) {
             Toast.makeText(this, "Seleccionaste Categorías", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_goals) {
-            Toast.makeText(this, "Seleccionaste Metas de Ahorro", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivity.this, meta_ahorro.class);
+            startActivity(intent);
         } else if (id == R.id.nav_reports) {
             Toast.makeText(this, "Seleccionaste Reportes", Toast.LENGTH_SHORT).show();
         }
