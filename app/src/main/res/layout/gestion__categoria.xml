@@ -2,6 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
@@ -11,15 +12,17 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
+        android:background="@color/primary_navy"
+        app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar_categorias"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/primary_emerald"
+            android:background="@color/primary_navy"
             app:title="Gestión de Categorías"
-            app:titleTextColor="@android:color/white" />
+            app:titleTextColor="@android:color/white"
+            app:navigationIconTint="@android:color/white" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -27,86 +30,157 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="16dp"
+        android:paddingHorizontal="18dp"
+        android:paddingTop="16dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+        <!-- TARJETA EJECUTIVA DE RESUMEN GLOBAL -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="3dp"
-            app:cardBackgroundColor="@color/card_background">
+            android:layout_marginBottom="20dp"
+            app:cardCornerRadius="22dp"
+            app:cardElevation="6dp"
+            app:cardBackgroundColor="@color/primary_navy">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="18dp">
+                android:padding="22dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Gasto Total en Categorías"
-                    android:textSize="14sp"
-                    android:textColor="@color/text_secondary" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TOTAL CONSUMIDO EN CATEGORÍAS"
+                        android:textAllCaps="true"
+                        android:letterSpacing="0.08"
+                        android:textColor="#A0B2C6"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:layout_centerVertical="true" />
+
+                    <TextView
+                        android:id="@+id/tv_porcentaje_global_categorias"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:background="#15FFFFFF"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="4dp"
+                        android:text="65% asignado"
+                        android:textColor="#E0E6ED"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+
+                <!-- Monto Total Gastado -->
                 <TextView
                     android:id="@+id/tv_total_gastado_categorias"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="-$291.25"
-                    android:textSize="26sp"
+                    android:textSize="32sp"
                     android:textStyle="bold"
-                    android:textColor="@color/expense_red"
-                    android:layout_marginTop="4dp" />
+                    android:letterSpacing="-0.02"
+                    android:textColor="@color/expense_gold"
+                    android:layout_marginTop="8dp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <!-- Barra general de progreso -->
+                <ProgressBar
+                    android:id="@+id/pb_progreso_global_categorias"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="6dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp"
+                    android:max="100"
+                    android:progress="65"
+                    android:progressTint="@color/expense_gold"
+                    android:progressBackgroundTint="#20FFFFFF" />
+
+                <!-- Desglose Presupuesto Total vs Disponible -->
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Distribución de tus compras realizadas este mes"
-                    android:textSize="12sp"
-                    android:textColor="@color/text_secondary"
-                    android:layout_marginTop="4dp" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_presupuesto_total_categorias"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Límite: $450.00"
+                        android:textSize="12sp"
+                        android:textColor="#A0B2C6" />
+
+                    <TextView
+                        android:id="@+id/tv_disponible_global_categorias"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Disponible: $158.75"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/white" />
+                </LinearLayout>
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <TextView
-            android:layout_width="wrap_content"
+        <!-- Cabecera de la Lista -->
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Desglose por Categoría"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="@color/text_primary"
-            android:layout_marginBottom="4dp" />
+            android:layout_marginBottom="10dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Presiona + en una categoría para registrar un gasto."
-            android:textSize="14sp"
-            android:textColor="@color/text_secondary"
-            android:layout_marginBottom="12dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Desglose por Categoría"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"
+                android:layout_centerVertical="true" />
 
+            <TextView
+                android:id="@+id/tv_cantidad_categorias"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:text="4 activas"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="@color/secondary_gray" />
+        </RelativeLayout>
+
+        <!-- Recycler View -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_categorias"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:clipToPadding="false"
-            android:paddingBottom="72dp" />
+            android:paddingBottom="84dp"
+            tools:listitem="@layout/item_categoria" />
 
     </LinearLayout>
 
+    <!-- FAB con el Azul Marino Oficial -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_agregar_categoria"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        app:backgroundTint="@color/primary_emerald"
+        android:layout_margin="20dp"
+        app:backgroundTint="@color/primary_navy"
         app:tint="@android:color/white"
+        app:elevation="6dp"
+        android:contentDescription="Nueva Categoría"
         android:src="@android:drawable/ic_input_add" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary_emerald">#2E7D32</color>
-    <color name="secondary_turquoise">#00838F</color>
-    <color name="expense_red">#C62828</color>
-    <color name="background_light">#F5F5F5</color>
+    <color name="primary_navy">#050A30</color>
+    <color name="secondary_gray">#8B8383</color>
+    <color name="expense_gold">#B79347</color>
+    <color name="background_light">#F4F6FC</color>
     <color name="card_background">#FFFFFF</color>
-    <color name="text_primary">#212121</color>
-    <color name="text_secondary">#757575</color>
+    <color name="text_primary">#1C1E21</color>
+    <color name="text_secondary">#8B8383</color>
+
+    <color name="primary_emerald">#050A30</color>
+    <color name="secondary_turquoise">#8B8383</color>
+    <color name="expense_red">#B79347</color>
 </resources>

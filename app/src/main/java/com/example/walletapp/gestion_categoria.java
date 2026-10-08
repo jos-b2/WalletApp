@@ -1,5 +1,6 @@
 package com.example.walletapp;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -48,6 +49,7 @@ public class gestion_categoria extends AppCompatActivity {
             this.gastoAcumulado += monto;
         }
 
+        // Corrección del cálculo de dinero disponible
         public double getDineroDisponible() {
             return presupuestoTotal - gastoAcumulado;
         }
@@ -91,10 +93,18 @@ public class gestion_categoria extends AppCompatActivity {
 
             if (disponible >= 0) {
                 holder.tvDisponible.setText(String.format(Locale.US, "$%,.2f disponibles (%d%%)", disponible, porcentaje));
-                holder.tvDisponible.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.primary_emerald));
+                try {
+                    holder.tvDisponible.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.primary_navy));
+                } catch (Exception e) {
+                    holder.tvDisponible.setTextColor(Color.parseColor("#050A30"));
+                }
             } else {
                 holder.tvDisponible.setText(String.format(Locale.US, "-$%,.2f (Excedido)", Math.abs(disponible)));
-                holder.tvDisponible.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.expense_red));
+                try {
+                    holder.tvDisponible.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.expense_gold));
+                } catch (Exception e) {
+                    holder.tvDisponible.setTextColor(Color.parseColor("#B79347"));
+                }
             }
 
             holder.progressBar.setProgress(porcentaje);
@@ -132,8 +142,14 @@ public class gestion_categoria extends AppCompatActivity {
     private RecyclerView rvCategorias;
     private CategoriaAdapterInterno adapter;
     private List<CategoriaItem> listaCategorias;
+
+    // Métricas del Dashboard Superior
     private TextView tvTotalGastado;
-    private double totalGastoGlobal = 0.0;
+    private TextView tvPorcentajeGlobal;
+    private TextView tvPresupuestoTotal;
+    private TextView tvDisponibleGlobal;
+    private TextView tvCantidadCategorias;
+    private ProgressBar pbProgresoGlobal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,7 +165,14 @@ public class gestion_categoria extends AppCompatActivity {
             toolbar.setNavigationOnClickListener(v -> finish());
         }
 
+        // Vincular componentes de la tarjeta ejecutiva
         tvTotalGastado = findViewById(R.id.tv_total_gastado_categorias);
+        tvPorcentajeGlobal = findViewById(R.id.tv_porcentaje_global_categorias);
+        tvPresupuestoTotal = findViewById(R.id.tv_presupuesto_total_categorias);
+        tvDisponibleGlobal = findViewById(R.id.tv_disponible_global_categorias);
+        tvCantidadCategorias = findViewById(R.id.tv_cantidad_categorias);
+        pbProgresoGlobal = findViewById(R.id.pb_progreso_global_categorias);
+
         rvCategorias = findViewById(R.id.rv_categorias);
         rvCategorias.setLayoutManager(new LinearLayoutManager(this));
 
@@ -159,12 +182,11 @@ public class gestion_categoria extends AppCompatActivity {
         listaCategorias.add(new CategoriaItem("Servicios", "Luz, Agua, Recibo de Internet", 100.00, 68.75));
         listaCategorias.add(new CategoriaItem("Ocio y Salidas", "Cine, Juegos, Salidas con amigos", 70.00, 35.00));
 
-        recalcularGastoTotal();
-
-        adapter = new CategoriaAdapterInterno(listaCategorias, (item, position) -> {
-            mostrarDialogoSumarGasto(item, position);
-        });
+        adapter = new CategoriaAdapterInterno(listaCategorias, this::mostrarDialogoSumarGasto);
         rvCategorias.setAdapter(adapter);
+
+        // Recalcular métricas de cabecera en tiempo real
+        actualizarMetricasCabecera();
 
         FloatingActionButton fab = findViewById(R.id.fab_agregar_categoria);
         if (fab != null) {
@@ -172,13 +194,43 @@ public class gestion_categoria extends AppCompatActivity {
         }
     }
 
-    private void recalcularGastoTotal() {
-        totalGastoGlobal = 0.0;
+    private void actualizarMetricasCabecera() {
+        double gastoTotal = 0.0;
+        double presupuestoGlobal = 0.0;
+
         for (CategoriaItem item : listaCategorias) {
-            totalGastoGlobal += item.getGastoAcumulado();
+            gastoTotal += item.getGastoAcumulado();
+            presupuestoGlobal += item.getPresupuestoTotal();
         }
+
+        double disponibleGlobal = presupuestoGlobal - gastoTotal;
+        int porcentajeConsumido = 0;
+        if (presupuestoGlobal > 0) {
+            porcentajeConsumido = (int) Math.round((gastoTotal / presupuestoGlobal) * 100);
+        }
+
         if (tvTotalGastado != null) {
-            tvTotalGastado.setText(String.format(Locale.US, "-$%,.2f", totalGastoGlobal));
+            tvTotalGastado.setText(String.format(Locale.US, "-$%,.2f", gastoTotal));
+        }
+
+        if (tvPresupuestoTotal != null) {
+            tvPresupuestoTotal.setText(String.format(Locale.US, "Límite: $%,.2f", presupuestoGlobal));
+        }
+
+        if (tvDisponibleGlobal != null) {
+            tvDisponibleGlobal.setText(String.format(Locale.US, "Disponible: $%,.2f", Math.max(0, disponibleGlobal)));
+        }
+
+        if (tvPorcentajeGlobal != null) {
+            tvPorcentajeGlobal.setText(porcentajeConsumido + "% consumido");
+        }
+
+        if (pbProgresoGlobal != null) {
+            pbProgresoGlobal.setProgress(Math.min(100, porcentajeConsumido));
+        }
+
+        if (tvCantidadCategorias != null) {
+            tvCantidadCategorias.setText(listaCategorias.size() + " activas");
         }
     }
 
@@ -194,7 +246,7 @@ public class gestion_categoria extends AppCompatActivity {
 
         new MaterialAlertDialogBuilder(this)
                 .setTitle("Sumar Gasto a " + item.getNombre())
-                .setMessage("Ingresa el dinero que acabas de gastar en esta categoría:")
+                .setMessage("Ingresa el monto que acabas de gastar:")
                 .setView(layout)
                 .setNegativeButton("Cancelar", null)
                 .setPositiveButton("Sumar", (dialog, which) -> {
@@ -204,9 +256,9 @@ public class gestion_categoria extends AppCompatActivity {
                             double extra = Double.parseDouble(strMonto);
                             item.sumarGasto(extra);
                             adapter.notifyItemChanged(position);
-                            recalcularGastoTotal();
+                            actualizarMetricasCabecera();
 
-                            Toast.makeText(this, "Se agregaron $" + extra + " a " + item.getNombre(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Se sumaron $" + extra + " a " + item.getNombre(), Toast.LENGTH_SHORT).show();
                         } catch (NumberFormatException e) {
                             Toast.makeText(this, "Monto inválido", Toast.LENGTH_SHORT).show();
                         }
@@ -221,11 +273,11 @@ public class gestion_categoria extends AppCompatActivity {
         layout.setPadding(60, 20, 60, 10);
 
         EditText etNombre = new EditText(this);
-        etNombre.setHint("Nombre (ej. Ropa, Salud)");
+        etNombre.setHint("Nombre (ej. Salud, Ropa)");
         layout.addView(etNombre);
 
         EditText etDetalle = new EditText(this);
-        etDetalle.setHint("Detalle (ej. Zapatos, Medicinas)");
+        etDetalle.setHint("Detalle (ej. Farmacia, Consultas)");
         layout.addView(etDetalle);
 
         EditText etPresupuesto = new EditText(this);
@@ -243,7 +295,7 @@ public class gestion_categoria extends AppCompatActivity {
                     String presupuestoStr = etPresupuesto.getText().toString().trim();
 
                     if (TextUtils.isEmpty(nombre) || TextUtils.isEmpty(presupuestoStr)) {
-                        Toast.makeText(this, "Debes llenar nombre y presupuesto", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Debes ingresar nombre y presupuesto", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
@@ -254,10 +306,11 @@ public class gestion_categoria extends AppCompatActivity {
                         listaCategorias.add(0, new CategoriaItem(nombre, detalle, presupuesto, 0.0));
                         adapter.notifyItemInserted(0);
                         rvCategorias.scrollToPosition(0);
+                        actualizarMetricasCabecera();
 
                         SweetAlertDialog exito = new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE);
                         exito.setTitleText("¡Categoría Creada!");
-                        exito.setContentText("Categoría lista con $" + presupuesto + " disponibles.");
+                        exito.setContentText("Categoría lista con $" + presupuesto + " asignados.");
                         exito.setConfirmText("Listo");
                         exito.show();
 

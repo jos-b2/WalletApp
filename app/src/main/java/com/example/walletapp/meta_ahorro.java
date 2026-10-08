@@ -1,5 +1,6 @@
 package com.example.walletapp;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -14,11 +15,21 @@ import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class meta_ahorro extends AppCompatActivity {
 
     private LinearLayout llContenedorMetas;
+    private TextView tvTotalAcumulado;
+    private TextView tvResumenProgreso;
+    private TextView tvObjetivoGlobal;
+    private TextView tvRestanteGlobal;
+    private TextView tvContadorMetas;
+    private ProgressBar pbMetasGlobal;
+
+    private final List<Meta> listaMetas = new ArrayList<>();
 
     private static class Meta {
         String titulo;
@@ -47,9 +58,19 @@ public class meta_ahorro extends AppCompatActivity {
         }
 
         llContenedorMetas = findViewById(R.id.ll_contenedor_metas);
+        tvTotalAcumulado = findViewById(R.id.tv_total_acumulado_metas);
+        tvResumenProgreso = findViewById(R.id.tv_resumen_metas_progreso);
+        tvObjetivoGlobal = findViewById(R.id.tv_objetivo_global_metas);
+        tvRestanteGlobal = findViewById(R.id.tv_restante_global_metas);
+        tvContadorMetas = findViewById(R.id.tv_contador_metas_activas);
+        pbMetasGlobal = findViewById(R.id.pb_metas_global);
+
         FloatingActionButton fab = findViewById(R.id.fab_agregar_meta);
 
-        agregarMetaVista(new Meta("Nintendo Switch OLED", 350.00, 100.00));
+        Meta metaInicial = new Meta("Nintendo Switch OLED", 350.00, 100.00);
+        listaMetas.add(metaInicial);
+        agregarMetaVista(metaInicial);
+        recalcularMetricasGlobales();
 
         if (fab != null) {
             fab.setOnClickListener(v -> mostrarDialogoNuevaMeta());
@@ -98,13 +119,17 @@ public class meta_ahorro extends AppCompatActivity {
                             return;
                         }
 
-                        agregarMetaVista(new Meta(titulo, objetivo, ahorrado));
+                        Meta nuevaMeta = new Meta(titulo, objetivo, ahorrado);
+                        listaMetas.add(0, nuevaMeta);
+                        agregarMetaVista(nuevaMeta);
+                        recalcularMetricasGlobales();
 
                         SweetAlertDialog exito = new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE);
                         exito.setTitleText("¡Meta Creada!");
                         exito.setContentText("Iniciaste el ahorro para: " + titulo);
                         exito.setConfirmText("Aceptar");
                         exito.show();
+                        corregirBotonSweetAlert(exito);
 
                     } catch (NumberFormatException e) {
                         mostrarSweetWarning("Formato Inválido", "Ingresa valores numéricos válidos.");
@@ -163,6 +188,7 @@ public class meta_ahorro extends AppCompatActivity {
 
                         meta.ahorrado += abono;
                         actualizarDatosItem(meta, tvPorcentaje, progressBar, tvMontos);
+                        recalcularMetricasGlobales();
 
                         SweetAlertDialog exito = new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE);
                         if (meta.ahorrado >= meta.objetivo) {
@@ -174,6 +200,7 @@ public class meta_ahorro extends AppCompatActivity {
                         }
                         exito.setConfirmText("Aceptar");
                         exito.show();
+                        corregirBotonSweetAlert(exito);
 
                     } catch (NumberFormatException e) {
                         mostrarSweetWarning("Formato Inválido", "Ingresa un número válido.");
@@ -193,11 +220,63 @@ public class meta_ahorro extends AppCompatActivity {
         }
     }
 
+    private void recalcularMetricasGlobales() {
+        double totalAhorrado = 0.0;
+        double totalObjetivo = 0.0;
+
+        for (Meta meta : listaMetas) {
+            totalAhorrado += meta.ahorrado;
+            totalObjetivo += meta.objetivo;
+        }
+
+        double faltante = Math.max(0, totalObjetivo - totalAhorrado);
+        int porcentajeGlobal = 0;
+        if (totalObjetivo > 0) {
+            porcentajeGlobal = (int) Math.round((totalAhorrado / totalObjetivo) * 100);
+        }
+
+        if (tvTotalAcumulado != null) {
+            tvTotalAcumulado.setText(String.format(Locale.US, "$%,.2f", totalAhorrado));
+        }
+
+        if (tvObjetivoGlobal != null) {
+            tvObjetivoGlobal.setText(String.format(Locale.US, "Meta Total: $%,.2f", totalObjetivo));
+        }
+
+        if (tvRestanteGlobal != null) {
+            tvRestanteGlobal.setText(String.format(Locale.US, "Faltan: $%,.2f", faltante));
+        }
+
+        if (tvResumenProgreso != null) {
+            tvResumenProgreso.setText(porcentajeGlobal + "% global");
+        }
+
+        if (pbMetasGlobal != null) {
+            pbMetasGlobal.setProgress(Math.min(100, porcentajeGlobal));
+        }
+
+        if (tvContadorMetas != null) {
+            tvContadorMetas.setText(listaMetas.size() + " activas");
+        }
+    }
+
     private void mostrarSweetWarning(String titulo, String mensaje) {
         SweetAlertDialog dialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE);
         dialog.setTitleText(titulo);
         dialog.setContentText(mensaje);
         dialog.setConfirmText("Entendido");
         dialog.show();
+        corregirBotonSweetAlert(dialog);
+    }
+
+    private void corregirBotonSweetAlert(SweetAlertDialog dialog) {
+        Button btn = dialog.findViewById(com.ontbee.legacyforks.cn.pedant.SweetAlert.R.id.confirm_button);
+        if (btn != null) {
+            btn.setBackgroundColor(Color.parseColor("#050A30"));
+            btn.setTextColor(Color.WHITE);
+            btn.setMinimumHeight((int) (44 * getResources().getDisplayMetrics().density));
+            btn.setPadding(40, 0, 40, 0);
+            btn.setGravity(android.view.Gravity.CENTER);
+        }
     }
 }
