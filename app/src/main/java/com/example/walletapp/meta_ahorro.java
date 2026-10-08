@@ -1,7 +1,9 @@
 package com.example.walletapp;
 
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -46,6 +49,7 @@ public class meta_ahorro extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setStatusBarColor(Color.parseColor("#050A30"));
         setContentView(R.layout.meta_ahorro);
 
         Toolbar toolbar = findViewById(R.id.toolbar_metas);
@@ -77,30 +81,57 @@ public class meta_ahorro extends AppCompatActivity {
         }
     }
 
+    private EditText crearCampoEstilizado(String hint, int inputType) {
+        EditText editText = new EditText(this);
+        editText.setHint(hint);
+        editText.setHintTextColor(Color.parseColor("#8B8383"));
+        editText.setTextColor(Color.parseColor("#1C1E21"));
+        editText.setTextSize(14);
+        editText.setInputType(inputType);
+
+        int paddingH = (int) (14 * getResources().getDisplayMetrics().density);
+        int paddingV = (int) (12 * getResources().getDisplayMetrics().density);
+        editText.setPadding(paddingH, paddingV, paddingH, paddingV);
+
+        GradientDrawable shape = new GradientDrawable();
+        shape.setColor(Color.parseColor("#F4F6FC"));
+        shape.setCornerRadius(12 * getResources().getDisplayMetrics().density);
+        shape.setStroke((int) (1.2 * getResources().getDisplayMetrics().density), Color.parseColor("#CBD5E1"));
+        editText.setBackground(shape);
+
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        lp.bottomMargin = (int) (12 * getResources().getDisplayMetrics().density);
+        editText.setLayoutParams(lp);
+
+        return editText;
+    }
+
     private void mostrarDialogoNuevaMeta() {
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setPadding(60, 20, 60, 10);
+        layout.setPadding(
+                (int) (24 * getResources().getDisplayMetrics().density),
+                (int) (14 * getResources().getDisplayMetrics().density),
+                (int) (24 * getResources().getDisplayMetrics().density),
+                (int) (8 * getResources().getDisplayMetrics().density)
+        );
 
-        EditText etTitulo = new EditText(this);
-        etTitulo.setHint("Nombre (ej. Nintendo Switch OLED)");
+        EditText etTitulo = crearCampoEstilizado("Nombre (ej. Nintendo Switch OLED)", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        EditText etMeta = crearCampoEstilizado("Monto objetivo ($)", InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        EditText etAbono = crearCampoEstilizado("Ahorro inicial ($)", InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
         layout.addView(etTitulo);
-
-        EditText etMeta = new EditText(this);
-        etMeta.setHint("Monto objetivo (ej. 350.00)");
-        etMeta.setInputType(android.text.InputType.TYPE_CLASS_NUMBER | android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL);
         layout.addView(etMeta);
-
-        EditText etAbono = new EditText(this);
-        etAbono.setHint("Ahorro inicial (ej. 50.00)");
-        etAbono.setInputType(android.text.InputType.TYPE_CLASS_NUMBER | android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL);
         layout.addView(etAbono);
 
-        new MaterialAlertDialogBuilder(this)
+        AlertDialog dialog = new MaterialAlertDialogBuilder(this)
                 .setTitle("Nueva Meta de Ahorro")
                 .setView(layout)
                 .setNegativeButton("Cancelar", null)
-                .setPositiveButton("Crear", (dialog, which) -> {
+                .setPositiveButton("Crear", (d, which) -> {
                     String titulo = etTitulo.getText().toString().trim();
                     String metaStr = etMeta.getText().toString().trim();
                     String abonoStr = etAbono.getText().toString().trim();
@@ -127,7 +158,7 @@ public class meta_ahorro extends AppCompatActivity {
                         SweetAlertDialog exito = new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE);
                         exito.setTitleText("¡Meta Creada!");
                         exito.setContentText("Iniciaste el ahorro para: " + titulo);
-                        exito.setConfirmText("Aceptar");
+                        exito.setConfirmText("Listo");
                         exito.show();
                         corregirBotonSweetAlert(exito);
 
@@ -135,7 +166,10 @@ public class meta_ahorro extends AppCompatActivity {
                         mostrarSweetWarning("Formato Inválido", "Ingresa valores numéricos válidos.");
                     }
                 })
-                .show();
+                .create();
+
+        dialog.show();
+        configurarBotonesDialogo(dialog);
     }
 
     private void agregarMetaVista(Meta meta) {
@@ -158,21 +192,24 @@ public class meta_ahorro extends AppCompatActivity {
     }
 
     private void mostrarDialogoAbonar(Meta meta, TextView tvPorcentaje, ProgressBar progressBar, TextView tvMontos) {
-        EditText etMontoAbonar = new EditText(this);
-        etMontoAbonar.setHint("Ej. 25.00");
-        etMontoAbonar.setInputType(android.text.InputType.TYPE_CLASS_NUMBER | android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL);
-
         LinearLayout container = new LinearLayout(this);
         container.setOrientation(LinearLayout.VERTICAL);
-        container.setPadding(60, 20, 60, 10);
+        container.setPadding(
+                (int) (24 * getResources().getDisplayMetrics().density),
+                (int) (14 * getResources().getDisplayMetrics().density),
+                (int) (24 * getResources().getDisplayMetrics().density),
+                (int) (8 * getResources().getDisplayMetrics().density)
+        );
+
+        EditText etMontoAbonar = crearCampoEstilizado("Monto a abonar ($)", InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         container.addView(etMontoAbonar);
 
-        new MaterialAlertDialogBuilder(this)
+        AlertDialog dialog = new MaterialAlertDialogBuilder(this)
                 .setTitle("Abonar a meta")
                 .setMessage(meta.titulo)
                 .setView(container)
                 .setNegativeButton("Cancelar", null)
-                .setPositiveButton("Abonar", (dialog, which) -> {
+                .setPositiveButton("Abonar", (d, which) -> {
                     String abonoStr = etMontoAbonar.getText().toString().trim();
                     if (TextUtils.isEmpty(abonoStr)) {
                         mostrarSweetWarning("Campo vacío", "Debes ingresar una cantidad.");
@@ -198,7 +235,7 @@ public class meta_ahorro extends AppCompatActivity {
                             exito.setTitleText("Abono Registrado");
                             exito.setContentText("Abonaste: $" + String.format(Locale.US, "%.2f", abono));
                         }
-                        exito.setConfirmText("Aceptar");
+                        exito.setConfirmText("Listo");
                         exito.show();
                         corregirBotonSweetAlert(exito);
 
@@ -206,7 +243,10 @@ public class meta_ahorro extends AppCompatActivity {
                         mostrarSweetWarning("Formato Inválido", "Ingresa un número válido.");
                     }
                 })
-                .show();
+                .create();
+
+        dialog.show();
+        configurarBotonesDialogo(dialog);
     }
 
     private void actualizarDatosItem(Meta meta, TextView tvPorcentaje, ProgressBar progressBar, TextView tvMontos) {
@@ -257,6 +297,18 @@ public class meta_ahorro extends AppCompatActivity {
 
         if (tvContadorMetas != null) {
             tvContadorMetas.setText(listaMetas.size() + " activas");
+        }
+    }
+
+    private void configurarBotonesDialogo(AlertDialog dialog) {
+        Button btnPositivo = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+        Button btnNegativo = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+
+        if (btnPositivo != null) {
+            btnPositivo.setTextColor(Color.parseColor("#050A30"));
+        }
+        if (btnNegativo != null) {
+            btnNegativo.setTextColor(Color.parseColor("#8B8383"));
         }
     }
 

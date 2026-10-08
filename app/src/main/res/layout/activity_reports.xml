@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:background="#F4F6FC"
     tools:context=".ReportsActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
+        android:fitsSystemWindows="true"
+        android:background="#050A30"
         app:elevation="0dp">
 
         <com.google.android.material.appbar.MaterialToolbar
@@ -19,7 +22,8 @@
             android:layout_height="?attr/actionBarSize"
             android:background="#050A30"
             app:title="Reportes Financieros"
-            app:titleTextColor="@android:color/white" />
+            app:titleTextColor="@android:color/white"
+            app:navigationIconTint="@android:color/white" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -95,7 +99,6 @@
                         android:textColor="@android:color/white"
                         android:textSize="12sp"
                         android:textStyle="bold"
-                        app:cardCornerRadius="8dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_balance_neto" />
 
@@ -117,7 +120,6 @@
                     android:layout_height="wrap_content"
                     android:padding="20dp">
 
-                    <!-- Barra lateral de acento (Azul Primario) -->
                     <View
                         android:id="@+id/view_accent_ingresos"
                         android:layout_width="6dp"
@@ -195,7 +197,6 @@
                     android:layout_height="wrap_content"
                     android:padding="20dp">
 
-                    <!-- Barra lateral de acento (Dorado / Alerta) -->
                     <View
                         android:id="@+id/view_accent_gastos"
                         android:layout_width="6dp"

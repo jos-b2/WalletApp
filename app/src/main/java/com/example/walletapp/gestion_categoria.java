@@ -1,17 +1,21 @@
 package com.example.walletapp;
 
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -49,7 +53,6 @@ public class gestion_categoria extends AppCompatActivity {
             this.gastoAcumulado += monto;
         }
 
-        // Corrección del cálculo de dinero disponible
         public double getDineroDisponible() {
             return presupuestoTotal - gastoAcumulado;
         }
@@ -143,7 +146,6 @@ public class gestion_categoria extends AppCompatActivity {
     private CategoriaAdapterInterno adapter;
     private List<CategoriaItem> listaCategorias;
 
-    // Métricas del Dashboard Superior
     private TextView tvTotalGastado;
     private TextView tvPorcentajeGlobal;
     private TextView tvPresupuestoTotal;
@@ -165,7 +167,6 @@ public class gestion_categoria extends AppCompatActivity {
             toolbar.setNavigationOnClickListener(v -> finish());
         }
 
-        // Vincular componentes de la tarjeta ejecutiva
         tvTotalGastado = findViewById(R.id.tv_total_gastado_categorias);
         tvPorcentajeGlobal = findViewById(R.id.tv_porcentaje_global_categorias);
         tvPresupuestoTotal = findViewById(R.id.tv_presupuesto_total_categorias);
@@ -185,7 +186,6 @@ public class gestion_categoria extends AppCompatActivity {
         adapter = new CategoriaAdapterInterno(listaCategorias, this::mostrarDialogoSumarGasto);
         rvCategorias.setAdapter(adapter);
 
-        // Recalcular métricas de cabecera en tiempo real
         actualizarMetricasCabecera();
 
         FloatingActionButton fab = findViewById(R.id.fab_agregar_categoria);
@@ -234,22 +234,53 @@ public class gestion_categoria extends AppCompatActivity {
         }
     }
 
+    private EditText crearCampoEstilizado(String hint, int inputType) {
+        EditText editText = new EditText(this);
+        editText.setHint(hint);
+        editText.setHintTextColor(Color.parseColor("#8B8383"));
+        editText.setTextColor(Color.parseColor("#1C1E21"));
+        editText.setTextSize(14);
+        editText.setInputType(inputType);
+
+        int paddingH = (int) (14 * getResources().getDisplayMetrics().density);
+        int paddingV = (int) (12 * getResources().getDisplayMetrics().density);
+        editText.setPadding(paddingH, paddingV, paddingH, paddingV);
+
+        GradientDrawable shape = new GradientDrawable();
+        shape.setColor(Color.parseColor("#F4F6FC"));
+        shape.setCornerRadius(12 * getResources().getDisplayMetrics().density);
+        shape.setStroke((int) (1.2 * getResources().getDisplayMetrics().density), Color.parseColor("#CBD5E1"));
+        editText.setBackground(shape);
+
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        lp.bottomMargin = (int) (12 * getResources().getDisplayMetrics().density);
+        editText.setLayoutParams(lp);
+
+        return editText;
+    }
+
     private void mostrarDialogoSumarGasto(CategoriaItem item, int position) {
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setPadding(60, 20, 60, 10);
+        layout.setPadding(
+                (int) (24 * getResources().getDisplayMetrics().density),
+                (int) (14 * getResources().getDisplayMetrics().density),
+                (int) (24 * getResources().getDisplayMetrics().density),
+                (int) (8 * getResources().getDisplayMetrics().density)
+        );
 
-        EditText etMonto = new EditText(this);
-        etMonto.setHint("Monto a sumar (ej. 12.50)");
-        etMonto.setInputType(android.text.InputType.TYPE_CLASS_NUMBER | android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        EditText etMonto = crearCampoEstilizado("Monto a sumar ($)", InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         layout.addView(etMonto);
 
-        new MaterialAlertDialogBuilder(this)
+        AlertDialog dialog = new MaterialAlertDialogBuilder(this)
                 .setTitle("Sumar Gasto a " + item.getNombre())
-                .setMessage("Ingresa el monto que acabas de gastar:")
+                .setMessage("Ingresa el dinero que acabas de gastar:")
                 .setView(layout)
                 .setNegativeButton("Cancelar", null)
-                .setPositiveButton("Sumar", (dialog, which) -> {
+                .setPositiveButton("Sumar", (d, which) -> {
                     String strMonto = etMonto.getText().toString().trim();
                     if (!TextUtils.isEmpty(strMonto)) {
                         try {
@@ -257,39 +288,41 @@ public class gestion_categoria extends AppCompatActivity {
                             item.sumarGasto(extra);
                             adapter.notifyItemChanged(position);
                             actualizarMetricasCabecera();
-
                             Toast.makeText(this, "Se sumaron $" + extra + " a " + item.getNombre(), Toast.LENGTH_SHORT).show();
                         } catch (NumberFormatException e) {
                             Toast.makeText(this, "Monto inválido", Toast.LENGTH_SHORT).show();
                         }
                     }
                 })
-                .show();
+                .create();
+
+        dialog.show();
+        configurarBotonesDialogo(dialog);
     }
 
     private void mostrarDialogoNuevaCategoria() {
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setPadding(60, 20, 60, 10);
+        layout.setPadding(
+                (int) (24 * getResources().getDisplayMetrics().density),
+                (int) (14 * getResources().getDisplayMetrics().density),
+                (int) (24 * getResources().getDisplayMetrics().density),
+                (int) (8 * getResources().getDisplayMetrics().density)
+        );
 
-        EditText etNombre = new EditText(this);
-        etNombre.setHint("Nombre (ej. Salud, Ropa)");
+        EditText etNombre = crearCampoEstilizado("Nombre (ej. Salud, Ropa)", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        EditText etDetalle = crearCampoEstilizado("Detalle (ej. Farmacia, Consultas)", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+        EditText etPresupuesto = crearCampoEstilizado("Presupuesto Asignado ($)", InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
         layout.addView(etNombre);
-
-        EditText etDetalle = new EditText(this);
-        etDetalle.setHint("Detalle (ej. Farmacia, Consultas)");
         layout.addView(etDetalle);
-
-        EditText etPresupuesto = new EditText(this);
-        etPresupuesto.setHint("Presupuesto Asignado (ej. 100.00)");
-        etPresupuesto.setInputType(android.text.InputType.TYPE_CLASS_NUMBER | android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL);
         layout.addView(etPresupuesto);
 
-        new MaterialAlertDialogBuilder(this)
+        AlertDialog dialog = new MaterialAlertDialogBuilder(this)
                 .setTitle("Nueva Categoría")
                 .setView(layout)
                 .setNegativeButton("Cancelar", null)
-                .setPositiveButton("Crear", (dialog, which) -> {
+                .setPositiveButton("Crear", (d, which) -> {
                     String nombre = etNombre.getText().toString().trim();
                     String detalle = etDetalle.getText().toString().trim();
                     String presupuestoStr = etPresupuesto.getText().toString().trim();
@@ -313,11 +346,38 @@ public class gestion_categoria extends AppCompatActivity {
                         exito.setContentText("Categoría lista con $" + presupuesto + " asignados.");
                         exito.setConfirmText("Listo");
                         exito.show();
+                        corregirBotonSweetAlert(exito);
 
                     } catch (NumberFormatException e) {
                         Toast.makeText(this, "Valor numérico inválido", Toast.LENGTH_SHORT).show();
                     }
                 })
-                .show();
+                .create();
+
+        dialog.show();
+        configurarBotonesDialogo(dialog);
+    }
+
+    private void configurarBotonesDialogo(AlertDialog dialog) {
+        Button btnPositivo = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+        Button btnNegativo = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+
+        if (btnPositivo != null) {
+            btnPositivo.setTextColor(Color.parseColor("#050A30"));
+        }
+        if (btnNegativo != null) {
+            btnNegativo.setTextColor(Color.parseColor("#8B8383"));
+        }
+    }
+
+    private void corregirBotonSweetAlert(SweetAlertDialog dialog) {
+        Button btn = dialog.findViewById(com.ontbee.legacyforks.cn.pedant.SweetAlert.R.id.confirm_button);
+        if (btn != null) {
+            btn.setBackgroundColor(Color.parseColor("#050A30"));
+            btn.setTextColor(Color.WHITE);
+            btn.setMinimumHeight((int) (44 * getResources().getDisplayMetrics().density));
+            btn.setPadding(40, 0, 40, 0);
+            btn.setGravity(android.view.Gravity.CENTER);
+        }
     }
 }

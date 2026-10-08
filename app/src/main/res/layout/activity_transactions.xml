@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:background="#F4F6FC"
     tools:context=".TransactionsActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
+        android:fitsSystemWindows="true"
+        android:background="#050A30"
         app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
@@ -19,7 +22,8 @@
             android:layout_height="?attr/actionBarSize"
             android:background="#050A30"
             app:title="Historial de Transacciones"
-            app:titleTextColor="@android:color/white" />
+            app:titleTextColor="@android:color/white"
+            app:navigationIconTint="@android:color/white" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -30,7 +34,6 @@
         android:padding="20dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <!-- Tarjeta de encabezado decorativa -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
