@@ -1,52 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    app:cardCornerRadius="12dp"
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginVertical="6dp"
+    app:cardCornerRadius="20dp"
     app:cardElevation="2dp"
-    app:cardBackgroundColor="@color/card_background">
+    app:strokeWidth="0dp"
+    app:cardBackgroundColor="@android:color/white">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:gravity="center_vertical">
+        android:padding="16dp">
 
-        <LinearLayout
+        <!-- Contenedor estético izquierdo para dar identidad visual -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_icon_bg"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:cardBackgroundColor="#F4F6FC"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_item_icono"
+                android:layout_width="37dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center"
+                android:src="@drawable/logo1"/>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Línea divisoria vertical azul con estilo -->
+        <View
+            android:id="@+id/divider_vertical"
+            android:layout_width="1.5dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="12dp"
+            android:background="#050A30"
+            app:layout_constraintBottom_toBottomOf="@+id/card_icon_bg"
+            app:layout_constraintStart_toEndOf="@+id/card_icon_bg"
+            app:layout_constraintTop_toTopOf="@+id/card_icon_bg" />
+
+        <!-- Título del movimiento -->
+        <TextView
+            android:id="@+id/tv_item_titulo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="8dp"
+            android:text="Supermercado La Despensa"
+            android:textColor="#050A30"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintEnd_toStartOf="@+id/linear_monto_container"
+            app:layout_constraintStart_toEndOf="@+id/divider_vertical"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/tv_item_titulo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Título"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_primary"/>
-
-            <TextView
-                android:id="@+id/tv_item_subtitulo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="General • Reciente"
-                android:textSize="12sp"
-                android:textColor="@color/text_secondary"/>
-        </LinearLayout>
-
+        <!-- Subtítulo / Categoría y Fecha -->
         <TextView
-            android:id="@+id/tv_item_monto"
+            android:id="@+id/tv_item_subtitulo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:text="Alimentación • Hoy, 03:45 PM"
+            android:textColor="#8B8383"
+            android:textSize="12sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/linear_monto_container"
+            app:layout_constraintStart_toEndOf="@+id/divider_vertical"
+            app:layout_constraintTop_toBottomOf="@+id/tv_item_titulo" />
+
+        <!-- Bloque derecho para el monto con diseño flotante -->
+        <LinearLayout
+            android:id="@+id/linear_monto_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="-$0.00"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="@color/expense_red"/>
+            android:gravity="end"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
+            <TextView
+                android:id="@+id/tv_item_monto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-$45.00"
+                android:textColor="#B79347"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_item_estado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Completado"
+                android:textColor="#8B8383"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

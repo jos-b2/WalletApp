@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Color cuando el item ESTÁ seleccionado (Dorado) -->
+    <item android:color="@color/expense_gold" android:state_checked="true" />
+
+    <!-- Color por defecto cuando NO está seleccionado (Azul Marino Profundo) -->
+    <item android:color="@color/primary_emerald" />
+</selector>

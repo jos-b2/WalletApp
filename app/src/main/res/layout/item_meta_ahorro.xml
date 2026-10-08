@@ -1,82 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="12dp"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="3dp"
-    app:cardBackgroundColor="@color/card_background">
+    android:layout_marginHorizontal="6dp"
+    android:layout_marginVertical="8dp"
+    app:cardCornerRadius="24dp"
+    app:cardElevation="4dp"
+    app:strokeWidth="0dp"
+    app:cardBackgroundColor="@android:color/white">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="20dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <View
+            android:id="@+id/view_indicator_meta"
+            android:layout_width="6dp"
+            android:layout_height="0dp"
+            android:background="#B79347"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_porcentaje_meta"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_nombre_meta" />
+
+        <TextView
+            android:id="@+id/tv_nombre_meta"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="12dp"
+            android:text="Nintendo Switch OLED"
+            android:textColor="#050A30"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/tv_porcentaje_meta"
+            app:layout_constraintStart_toEndOf="@+id/view_indicator_meta"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/tv_nombre_meta"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Nintendo Switch OLED"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_primary" />
+        <TextView
+            android:id="@+id/tv_porcentaje_meta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#F4F6FC"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="4dp"
+            android:text="0%"
+            android:textColor="#B79347"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/tv_porcentaje_meta"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0%"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:textColor="@color/primary_emerald" />
-        </LinearLayout>
-
-        <ProgressBar
+        <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/pb_meta"
-            style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
-            android:layout_height="8dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="8dp"
-            android:max="100"
-            android:progress="0"
-            android:progressTint="@color/primary_emerald" />
+            android:layout_height="10dp"
+            android:layout_marginTop="16dp"
+            app:indicatorColor="#B79347"
+            app:layout_constraintTop_toBottomOf="@+id/tv_nombre_meta"
+            app:trackColor="#F4F6FC"
+            app:trackCornerRadius="5dp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tv_montos_meta"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:layout_marginEnd="12dp"
+            android:text="$0.00 / $350.00"
+            android:textColor="#8B8383"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_abonar_meta"
+            app:layout_constraintEnd_toStartOf="@+id/btn_abonar_meta"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btn_abonar_meta" />
 
-            <TextView
-                android:id="@+id/tv_montos_meta"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="$0.00 / $350.00"
-                android:textSize="14sp"
-                android:textColor="@color/text_secondary" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_abonar_meta"
+            android:layout_width="wrap_content"
+            android:layout_height="42dp"
+            android:layout_marginTop="16dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:insetLeft="0dp"
+            android:insetRight="0dp"
+            android:paddingHorizontal="20dp"
+            android:text="+ Abonar"
+            android:textColor="@android:color/white"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:backgroundTint="#050A30"
+            app:cornerRadius="14dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pb_meta" />
 
-            <Button
-                android:id="@+id/btn_abonar_meta"
-                android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:text="+ Abonar"
-                android:textSize="12sp"
-                android:backgroundTint="@color/secondary_turquoise"
-                android:textColor="@android:color/white"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp" />
-        </LinearLayout>
-
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>
