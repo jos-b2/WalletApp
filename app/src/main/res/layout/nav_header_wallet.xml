@@ -1,26 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="176dp"
+    android:layout_height="160dp"
     android:background="@color/primary_emerald"
     android:gravity="bottom"
     android:orientation="vertical"
     android:padding="16dp">
 
-    <TextView
+    <!-- Contenedor interno con tamaño grande y proporcionado -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Wallet App"
-        android:textColor="@android:color/white"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Control de Finanzas Personales"
-        android:textColor="#E0F2F1"
-        android:textSize="14sp"
-        android:layout_marginTop="4dp"/>
+        <!-- Logo más grande -->
+        <ImageView
+            android:layout_width="76dp"
+            android:layout_height="76dp"
+            android:layout_marginEnd="16dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/logo1"
+            android:contentDescription="Logo Menú" />
+
+        <!-- Textos más grandes -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Wallet App"
+                android:textColor="@android:color/white"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Control de Finanzas"
+                android:textColor="#E0F2F1"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>

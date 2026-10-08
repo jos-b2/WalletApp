@@ -32,6 +32,17 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 
+        <activity
+            android:name=".TransactionsActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+
+        <!-- Nueva Actividad: Reportes Financieros -->
+        <activity
+            android:name=".ReportsActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+
     </application>
 
 </manifest>

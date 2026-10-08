@@ -36,6 +36,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // CONFIGURACIÓN PARA MOSTRAR LOGO Y TÍTULO JUNTOS PROGRAMÁTICAMENTE:
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false); // Ocultamos el título nativo para evitar conflictos
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+            // Creamos un contenedor horizontal directamente en código para el logo1 y el texto
+            android.widget.LinearLayout titleLayout = new android.widget.LinearLayout(this);
+            titleLayout.setOrientation(android.widget.LinearLayout.HORIZONTAL);
+            titleLayout.setGravity(android.view.Gravity.CENTER_VERTICAL);
+
+            // ImageView para el logo1.png
+            android.widget.ImageView logoView = new android.widget.ImageView(this);
+            logoView.setImageResource(R.drawable.logo1);
+            int sizeInPx = (int) (32 * getResources().getDisplayMetrics().density); // 32dp de tamaño
+            android.widget.LinearLayout.LayoutParams imageParams = new android.widget.LinearLayout.LayoutParams(sizeInPx, sizeInPx);
+            imageParams.setMarginEnd((int) (8 * getResources().getDisplayMetrics().density)); // Margen a la derecha de 8dp
+            logoView.setLayoutParams(imageParams);
+            logoView.setScaleType(android.widget.ImageView.ScaleType.CENTER_INSIDE);
+            titleLayout.addView(logoView);
+
+            // TextView para el texto "Wallet App"
+            android.widget.TextView textView = new android.widget.TextView(this);
+            textView.setText("Wallet App");
+            textView.setTextSize(18);
+            textView.setTextColor(android.graphics.Color.WHITE); // <-- Aquí faltaba el paréntesis de cierre
+            textView.setTypeface(null, android.graphics.Typeface.BOLD);
+            titleLayout.addView(textView);
+
+            // Añadimos el diseño personalizado al Toolbar
+            androidx.appcompat.app.ActionBar.LayoutParams params = new androidx.appcompat.app.ActionBar.LayoutParams(
+                    androidx.appcompat.app.ActionBar.LayoutParams.WRAP_CONTENT,
+                    androidx.appcompat.app.ActionBar.LayoutParams.MATCH_PARENT
+            );
+            getSupportActionBar().setCustomView(titleLayout, params);
+            getSupportActionBar().setDisplayShowCustomEnabled(true);
+        }
+
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -112,7 +149,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (id == R.id.nav_dashboard) {
             Toast.makeText(this, "Ya estás en el Dashboard", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_transactions) {
-            Toast.makeText(this, "Seleccionaste Transacciones", Toast.LENGTH_SHORT).show();
+            // Abre la vista de Transacciones
+            startActivity(new android.content.Intent(this, TransactionsActivity.class));
         } else if (id == R.id.nav_categories) {
         Intent intent = new Intent(MainActivity.this, gestion_categoria.class);
         startActivity(intent);
@@ -120,10 +158,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent = new Intent(MainActivity.this, meta_ahorro.class);
             startActivity(intent);
         } else if (id == R.id.nav_reports) {
-            Toast.makeText(this, "Seleccionaste Reportes", Toast.LENGTH_SHORT).show();
+            // Abre la vista de Reportes
+            startActivity(new android.content.Intent(this, ReportsActivity.class));
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 }
