@@ -1,7 +1,13 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.WalletApp" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <!-- Color principal de tu app -->
+        <item name="colorPrimary">@color/primary_navy</item>
+
+        <!-- Color de la barra de estado -->
+        <item name="android:statusBarColor">@color/primary_navy</item>
+
+        <!-- Iconos blancos en la barra de estado -->
+        <item name="android:windowLightStatusBar">false</item>
     </style>
 </resources>

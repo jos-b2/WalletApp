@@ -8,10 +8,10 @@
     android:fitsSystemWindows="true"
     android:background="@color/background_light">
 
-    <!-- Barra Superior -->
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
         android:background="@color/primary_navy"
         app:elevation="0dp">
 
@@ -34,7 +34,6 @@
         android:paddingTop="16dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <!-- TARJETA EJECUTIVA DE RESUMEN GLOBAL -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -78,7 +77,6 @@
                         android:textStyle="bold" />
                 </RelativeLayout>
 
-                <!-- Monto Total Gastado -->
                 <TextView
                     android:id="@+id/tv_total_gastado_categorias"
                     android:layout_width="wrap_content"
@@ -90,7 +88,6 @@
                     android:textColor="@color/expense_gold"
                     android:layout_marginTop="8dp" />
 
-                <!-- Barra general de progreso -->
                 <ProgressBar
                     android:id="@+id/pb_progreso_global_categorias"
                     style="?android:attr/progressBarStyleHorizontal"
@@ -103,7 +100,6 @@
                     android:progressTint="@color/expense_gold"
                     android:progressBackgroundTint="#20FFFFFF" />
 
-                <!-- Desglose Presupuesto Total vs Disponible -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -131,7 +127,6 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Cabecera de la Lista -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -158,7 +153,6 @@
                 android:textColor="@color/secondary_gray" />
         </RelativeLayout>
 
-        <!-- Recycler View -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_categorias"
             android:layout_width="match_parent"
@@ -170,7 +164,6 @@
 
     </LinearLayout>
 
-    <!-- FAB con el Azul Marino Oficial -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_agregar_categoria"
         android:layout_width="wrap_content"

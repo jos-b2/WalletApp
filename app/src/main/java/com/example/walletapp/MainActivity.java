@@ -39,48 +39,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private double saldoActual = 1275.00;
     private double totalIngresosMes = 1850.00;
     private double totalGastosMes = 575.00;
-    private double limitePresupuesto = 1850.00; // Puedes ajustarlo según las metas
+    private double limitePresupuesto = 1850.00;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main); // O activity_main_2 según tu archivo principal
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // CONFIGURACIÓN PARA MOSTRAR LOGO Y TÍTULO JUNTOS:
+        // Configuración limpia de la Toolbar y el botón de apertura del menú (Drawer)
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setDisplayShowTitleEnabled(false); // Ocultamos el título por defecto ya que usamos el XML personalizado
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-            android.widget.LinearLayout titleLayout = new android.widget.LinearLayout(this);
-            titleLayout.setOrientation(android.widget.LinearLayout.HORIZONTAL);
-            titleLayout.setGravity(android.view.Gravity.CENTER_VERTICAL);
-
-            android.widget.ImageView logoView = new android.widget.ImageView(this);
-            logoView.setImageResource(R.drawable.logo1);
-
-            int sizeInPx = (int) (32 * getResources().getDisplayMetrics().density);
-            android.widget.LinearLayout.LayoutParams imageParams = new android.widget.LinearLayout.LayoutParams(sizeInPx, sizeInPx);
-            imageParams.setMarginEnd((int) (8 * getResources().getDisplayMetrics().density));
-            logoView.setLayoutParams(imageParams);
-            logoView.setScaleType(android.widget.ImageView.ScaleType.CENTER_INSIDE);
-            titleLayout.addView(logoView);
-
-            android.widget.TextView textView = new android.widget.TextView(this);
-            textView.setText("Wallet App");
-            textView.setTextSize(18);
-            textView.setTextColor(Color.WHITE);
-            textView.setTypeface(null, android.graphics.Typeface.BOLD);
-            titleLayout.addView(textView);
-
-            androidx.appcompat.app.ActionBar.LayoutParams params = new androidx.appcompat.app.ActionBar.LayoutParams(
-                    androidx.appcompat.app.ActionBar.LayoutParams.WRAP_CONTENT,
-                    androidx.appcompat.app.ActionBar.LayoutParams.MATCH_PARENT
-            );
-            getSupportActionBar().setCustomView(titleLayout, params);
-            getSupportActionBar().setDisplayShowCustomEnabled(true);
         }
 
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -134,10 +106,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 totalGastosMes += valor;
             }
 
-            // Recalcula Saldo, Ingresos, Gastos y la Barra de Presupuesto
             actualizarTablero();
 
-            // Inserta el nuevo item arriba en la lista
             if (llListaMovimientos != null) {
                 View nuevoItem = LayoutInflater.from(this).inflate(R.layout.item_movimiento, llListaMovimientos, false);
 
@@ -172,9 +142,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    /**
-     * Recalcula y refresca todos los indicadores financieros de la pantalla
-     */
     private void actualizarTablero() {
         if (tvTotalBalance != null) {
             tvTotalBalance.setText(String.format(Locale.US, "$%,.2f", saldoActual));
@@ -196,10 +163,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             tvBudgetLimit.setText(String.format(Locale.US, "Límite: $%,.2f", limitePresupuesto));
         }
 
-        // Cálculo dinámico del porcentaje de presupuesto consumido
         if (limitePresupuesto > 0) {
             int porcentaje = (int) Math.round((totalGastosMes / limitePresupuesto) * 100);
-            if (porcentaje > 100) porcentaje = 100; // Limitar al 100% en la barra visual
+            if (porcentaje > 100) porcentaje = 100;
 
             if (pbPresupuesto != null) {
                 pbPresupuesto.setProgress(porcentaje);

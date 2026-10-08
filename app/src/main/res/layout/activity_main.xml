@@ -12,21 +12,45 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background_light">
+        android:fitsSystemWindows="true"
+        android:background="#F4F6FC">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/primary_navy"
+            android:fitsSystemWindows="true"
+            android:background="#050A30"
             app:elevation="0dp">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@color/primary_navy"
-                app:title="Wallet App"
-                app:titleTextColor="@android:color/white" />
+                android:background="#050A30">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginEnd="8dp"
+                        android:src="@drawable/logo1"
+                        android:scaleType="centerInside" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Wallet App"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/white" />
+                </LinearLayout>
+
+            </androidx.appcompat.widget.Toolbar>
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -44,14 +68,13 @@
                 android:paddingTop="16dp"
                 android:paddingBottom="90dp">
 
-                <!-- TARJETA PRINCIPAL DE SALDO -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="22dp"
                     app:cardElevation="6dp"
                     android:layout_marginBottom="16dp"
-                    app:cardBackgroundColor="@color/primary_navy">
+                    app:cardBackgroundColor="#050A30">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -105,7 +128,6 @@
                             android:background="#20FFFFFF"
                             android:layout_marginBottom="14dp" />
 
-                        <!-- Resumen: Ingresos vs Gastos con IDs vinculados -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -156,7 +178,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="-$575.00"
-                                    android:textColor="@color/expense_gold"
+                                    android:textColor="#B79347"
                                     android:textSize="14sp"
                                     android:textStyle="bold"
                                     android:layout_marginTop="2dp" />
@@ -166,13 +188,12 @@
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
-                <!-- CONTROL DE PRESUPUESTO MENSUAL -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="16dp"
                     app:cardElevation="2dp"
-                    app:cardBackgroundColor="@color/card_background"
+                    app:cardBackgroundColor="@android:color/white"
                     android:layout_marginBottom="22dp">
 
                     <LinearLayout
@@ -191,7 +212,7 @@
                                 android:text="Presupuesto Mensual"
                                 android:textSize="14sp"
                                 android:textStyle="bold"
-                                android:textColor="@color/text_primary" />
+                                android:textColor="#050A30" />
 
                             <TextView
                                 android:id="@+id/tv_budget_percentage"
@@ -201,7 +222,7 @@
                                 android:text="31% consumido"
                                 android:textSize="12sp"
                                 android:textStyle="bold"
-                                android:textColor="@color/secondary_gray" />
+                                android:textColor="#8B8383" />
                         </RelativeLayout>
 
                         <ProgressBar
@@ -213,7 +234,7 @@
                             android:layout_marginBottom="10dp"
                             android:max="100"
                             android:progress="31"
-                            android:progressTint="@color/expense_gold"
+                            android:progressTint="#B79347"
                             android:progressBackgroundTint="#E0E0E0" />
 
                         <RelativeLayout
@@ -226,7 +247,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="Gastado: $575.00"
                                 android:textSize="12sp"
-                                android:textColor="@color/text_secondary" />
+                                android:textColor="#8B8383" />
 
                             <TextView
                                 android:id="@+id/tv_budget_limit"
@@ -236,13 +257,12 @@
                                 android:text="Límite: $1,850.00"
                                 android:textSize="12sp"
                                 android:textStyle="bold"
-                                android:textColor="@color/text_primary" />
+                                android:textColor="#050A30" />
                         </RelativeLayout>
 
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
-                <!-- MOVIMIENTOS RECIENTES -->
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -254,7 +274,7 @@
                         android:text="Movimientos Recientes"
                         android:textSize="17sp"
                         android:textStyle="bold"
-                        android:textColor="@color/text_primary"
+                        android:textColor="#050A30"
                         android:layout_centerVertical="true" />
 
                     <TextView
@@ -266,11 +286,10 @@
                         android:text="Ver todos"
                         android:textSize="13sp"
                         android:textStyle="bold"
-                        android:textColor="@color/secondary_gray"
+                        android:textColor="#8B8383"
                         android:padding="6dp" />
                 </RelativeLayout>
 
-                <!-- LISTA DINÁMICA -->
                 <LinearLayout
                     android:id="@+id/ll_lista_movimientos"
                     android:layout_width="match_parent"
@@ -282,7 +301,7 @@
                         android:layout_height="wrap_content"
                         app:cardCornerRadius="16dp"
                         app:cardElevation="1dp"
-                        app:cardBackgroundColor="@color/card_background"
+                        app:cardBackgroundColor="@android:color/white"
                         android:layout_marginBottom="10dp">
 
                         <LinearLayout
@@ -303,7 +322,7 @@
                                     android:layout_height="20dp"
                                     android:layout_gravity="center"
                                     android:src="@android:drawable/ic_menu_my_calendar"
-                                    app:tint="@color/primary_navy"/>
+                                    app:tint="#050A30"/>
                             </androidx.cardview.widget.CardView>
 
                             <LinearLayout
@@ -318,13 +337,13 @@
                                     android:text="Supermercado La Despensa"
                                     android:textSize="15sp"
                                     android:textStyle="bold"
-                                    android:textColor="@color/text_primary"/>
+                                    android:textColor="#050A30"/>
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="Alimentación • Hoy"
                                     android:textSize="12sp"
-                                    android:textColor="@color/text_secondary"
+                                    android:textColor="#8B8383"
                                     android:layout_marginTop="2dp"/>
                             </LinearLayout>
 
@@ -334,7 +353,7 @@
                                 android:text="-$45.00"
                                 android:textSize="16sp"
                                 android:textStyle="bold"
-                                android:textColor="@color/expense_gold"/>
+                                android:textColor="#B79347"/>
 
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
@@ -350,7 +369,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="20dp"
-            app:backgroundTint="@color/primary_navy"
+            app:backgroundTint="#050A30"
             app:tint="@android:color/white"
             app:elevation="6dp"
             android:contentDescription="Nueva Transacción"
