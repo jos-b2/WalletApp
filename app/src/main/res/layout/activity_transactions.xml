@@ -31,58 +31,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="20dp"
+        android:padding="16dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <androidx.cardview.widget.CardView
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/search_view_transactions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="2dp"
-            android:layout_marginBottom="20dp"
-            app:cardBackgroundColor="#050A30">
+            android:layout_marginBottom="16dp"
+            android:background="@android:color/white"
+            app:iconifiedByDefault="false"
+            app:queryHint="Buscar por comercio o categoría..." />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="20dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Registro Completo"
-                    android:textColor="#B79347"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    android:textAllCaps="true"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Todos tus movimientos"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
-                    android:textColor="@android:color/white"
-                    android:layout_marginTop="4dp"/>
-
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <ScrollView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_transactions"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="none">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <include layout="@layout/item_movimiento" />
-
-            </LinearLayout>
-        </ScrollView>
+            android:scrollbars="vertical" />
 
     </LinearLayout>
 
